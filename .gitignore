@@ -1,0 +1,8 @@
+/.quarto/
+/GraphReport_files
+/myGraph/_site
+/Michelle
+myGraph/_publish.yml
+.DS_Store
+myGraph/myGraph.quarto_ipynb
+GraphReport.quarto_ipynb

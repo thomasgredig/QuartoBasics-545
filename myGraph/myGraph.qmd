@@ -1,0 +1,67 @@
+---
+title: "FID"
+bibliography: references.bib
+echo: false
+format: pptx
+---
+
+## Free Induction Decay
+
+This graph shows the free induction decay [@bloch1946]:
+
+```{python}
+import pandas as pd
+
+url = "https://raw.githubusercontent.com/thomasgredig/QuartoBasics-545/main/data/BDBL-20160303-NMR-FID1Data.CSV"
+data = pd.read_csv(url, header=None)
+print(data.head())
+```
+
+```{python}
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots()
+ax.scatter(data[3]*1000, data[4], marker='.', color='r')
+ax.set_xlabel('t (ms)')
+ax.set_ylabel('V (V)')
+plt.show()
+```
+
+## Data Fitting
+
+We are going to fit the data to an exponential function:
+
+$$
+V = A + V_0 \; e^{-\frac{t}{T}}
+$$
+
+```{python}
+import numpy as np
+from scipy.optimize import curve_fit
+
+d2 = data[data[3]*1000 > 0.2]
+
+def model(t, V0, T, A):
+    return A + V0 * np.exp(-t / T)
+
+popt, pcov = curve_fit(model, 
+        d2[3]*1000, d2[4], 
+        p0=[1, 0.8, 0.1])
+
+V0, T, A = popt
+V0_err, T_err = np.sqrt(pcov[0,0]), np.sqrt(pcov[1,1])
+print(f"V0: {V0:.6} ± {V0_err:.2} \n T: {T:.6} ± {T_err:.2}")
+```
+
+```{python}
+t = np.arange(0,5,0.05)
+V = model(t, V0, T, A)
+fig, ax = plt.subplots()
+ax.scatter(data[3]*1000, data[4], marker='.', color='red')
+ax.plot(t, V, color='black')
+ax.set_xlabel('t (ms)')
+ax.set_ylabel('V (V)')
+plt.show()
+```
+
+## References

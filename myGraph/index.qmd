@@ -1,0 +1,14 @@
+---
+title: "Graphing Activity"
+author: "Thomas Gredig"
+bibliography: references.bib
+---
+
+This is the graphing activity for the free induction decay. @hahn1950
+
+```{python}
+url = "https://raw.githubusercontent.com/thomasgredig/QuartoBasics-545/31c15c348d2058242416335392c77e929bbe149d/data/NJKC-20160310-NMR.CSV"
+import pandas as pd
+data = pd.read_csv(url, header=None)
+print(data.head())
+```
